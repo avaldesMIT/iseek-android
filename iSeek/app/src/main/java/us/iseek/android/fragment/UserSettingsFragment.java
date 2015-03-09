@@ -27,6 +27,9 @@ import us.iseek.services.IUserService;
 import us.iseek.services.android.ServicesFactory;
 
 
+/**
+ * A fragment that displays user settings and allows the user to change such settings.
+ */
 public class UserSettingsFragment extends Fragment {
     private MainActivity activity;
 

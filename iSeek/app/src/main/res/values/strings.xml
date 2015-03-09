@@ -21,9 +21,18 @@
     <string name="get_started">To get started, login using Facebook</string>
     <string name="skip_login">continue as a guest</string>
 
-    <!-- Topic selection screen -->
+    <!-- Menu Items -->
+    <string name="topicsButton">topicsButton</string>
+    <string name="startTopicButton">startTopicButton</string>
+    <string name="inviteFriendsButton">inviteFriendsButton</string>
+    <string name="settingsButton">settingsButton</string>
+
+    <!-- Topic topic_selection screen -->
     <string name="default_screen_name">iSeek User</string>
     <string name="loading_topics">Loading topics...</string>
+    <string name="select_topic">Select topic</string>
+    <string name="no_topics">No one is chatting near you.</string>
+    <string name="start_topic">Start Topic!</string>
 
     <!-- User Settings screen -->
     <string name="settings_title">Settings</string>
@@ -31,15 +40,19 @@
     <string name="show_profile_pic">Show Facebook profile picture</string>
     <string name="screen_name">Screen Name</string>
     <string name="broadcast_location">Show distance</string>
-    <string name="saveButtonText">Save</string>
-    <string name="cancelButtonText">Restore</string>
+    <string name="save_button_text">Save</string>
+    <string name="cancel_button_text">Restore</string>
 
-    <!-- Menu Items -->
-    <string name="topicsButton">topicsButton</string>
-    <string name="startTopicButton">startTopicButton</string>
-    <string name="inviteFriendsButton">inviteFriendsButton</string>
-    <string name="settingsButton">settingsButton</string>
+    <!-- Create Topic screen -->
+    <string name="create_topic_title">Create Topic</string>
+    <string name="topic_name">Subject</string>
+    <string name="topic_error">Please write a name for your topic</string>
+    <string name="default_topic_name">New topic</string>
+    <string name="create_topic_button_text">Start!</string>
+    <string name="create_topic_progress_bar_text">Creating topic...</string>
+    <string name="subscribe_topic_progress_bar_text">Subscribing to topic...</string>
 
+    <!-- Other items -->
     <string name="action_eating">Pick Meal</string>
     <string name="action_location">Pick Location</string>
     <string name="action_photo">Pick Photo</string>
@@ -77,30 +90,4 @@
     <string name="exception">Exception: %1$s</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
-
-    <string-array name="food_types">
-        <item>Cheeseburger</item>
-        <item>Pizza</item>
-        <item>Hotdog</item>
-        <item>Italian</item>
-        <item>French</item>
-        <item>Chinese</item>
-        <item>Thai</item>
-        <item>Indian</item>
-        <item>&lt;Other></item>
-    </string-array>
-    <string-array name="food_og_urls">
-        <item>http://samples.ogp.me/314483151980285</item> <!-- Cheeseburger -->
-        <item>http://samples.ogp.me/314483221980278</item> <!-- Pizza -->
-        <item>http://samples.ogp.me/314483265313607</item> <!-- Hotdog -->
-        <item>http://samples.ogp.me/314483348646932</item> <!-- Italian -->
-        <item>http://samples.ogp.me/314483375313596</item> <!-- French -->
-        <item>http://samples.ogp.me/314483421980258</item> <!-- Chinese -->
-        <item>http://samples.ogp.me/314483451980255</item> <!-- Thai -->
-        <item>http://samples.ogp.me/314483491980251</item> <!-- Indian -->
-        <item/>
-    </string-array>
-
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
 </resources>

@@ -23,7 +23,7 @@ public interface MenuDisplayingActivity {
      * Call back to invoke when the user selects a different menu item.
      *
      * @param selectedItem
-     *                  - The new selection
+     *                  - The new topic_selection
      */
     public void onMenuSelectedCallback(MenuItem selectedItem);
 }

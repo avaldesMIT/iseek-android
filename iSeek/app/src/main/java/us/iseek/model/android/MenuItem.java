@@ -20,8 +20,8 @@ import java.util.EnumSet;
 public enum MenuItem {
 
     TOPICS_BUTTON("topicsButton", 0, 1),
-    START_TOPIC_BUTTON("startTopicButton", 2, 3),
-    INVITE_FRIENDS_BUTTON("inviteFriendsButton", 4, 5),
+    CHAT_BUTTON("chatButton", 2, 3),
+    START_TOPIC_BUTTON("startTopicButton", 4, 5),
     SETTINGS_BUTTON("settingsButton", 6, 7);
 
     private String symbol;

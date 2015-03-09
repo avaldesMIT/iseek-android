@@ -43,7 +43,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import us.iseek.android.R;
-import us.iseek.android.fragment.SelectionFragment;
+import us.iseek.android.fragment.TopicSelectionFragment;
 import us.iseek.android.fragment.UserSettingsFragment;
 import us.iseek.model.android.MenuItem;
 import us.iseek.model.user.User;
@@ -57,7 +57,8 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     private static final int SELECTION = 1;
     private static final int SETTINGS = 2;
     private static final int USER_SETTINGS = 3;
-    private static final int FRAGMENT_COUNT = USER_SETTINGS +1;
+    private static final int START_TOPIC = 4;
+    private static final int FRAGMENT_COUNT = START_TOPIC + 1;
 
     // Current user
     private User currentUser;
@@ -113,6 +114,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         fragments[SELECTION] = fm.findFragmentById(R.id.selectionFragment);
         fragments[SETTINGS] = fm.findFragmentById(R.id.facebookSettingsFragment);
         fragments[USER_SETTINGS] = fm.findFragmentById(R.id.userSettingsFragment);
+        fragments[START_TOPIC] = fm.findFragmentById(R.id.startTopicFragment);
 
         FragmentTransaction transaction = fm.beginTransaction();
         for(int i = 0; i < fragments.length; i++) {
@@ -167,7 +169,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         Session session = Session.getActiveSession();
 
         if (session != null && session.isOpened()) {
-            // If the session is already open, show the topic selection fragment
+            // If the session is already open, show the topic topic_selection fragment
             showFragment(SELECTION, false);
         } else {
             // Otherwise show the splash screen with the Facebook Login option
@@ -194,14 +196,22 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     }
 
     /**
-     * Shows the topic selection fragment
+     * Shows the topic topic_selection fragment
      */
     public void showTopicSelectionFragment() {
         // Set user's settings
-        ((SelectionFragment) this.fragments[SELECTION]).setUserValues(this.currentUser);
+        ((TopicSelectionFragment) this.fragments[SELECTION]).setUserValues(this.currentUser);
 
         // Show fragment
         showFragment(SELECTION, true);
+    }
+
+    /**
+     * Shows the start topic fragment
+     */
+    public void showStartTopicFragment() {
+        // Show fragment
+        showFragment(START_TOPIC, true);
     }
 
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
@@ -212,7 +222,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
                 manager.popBackStack();
             }
             // check for the OPENED state instead of session.isOpened() since for the
-            // OPENED_TOKEN_UPDATED state, the selection fragment should already be showing.
+            // OPENED_TOKEN_UPDATED state, the topic_selection fragment should already be showing.
             if (state.equals(SessionState.OPENED)) {
                 showFragment(SELECTION, false);
             } else if (state.isClosed()) {
@@ -314,6 +324,9 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
                 break;
             case SETTINGS_BUTTON:
                 this.showUserSettingsFragment();
+                break;
+            case START_TOPIC_BUTTON:
+                this.showStartTopicFragment();
                 break;
         }
     }

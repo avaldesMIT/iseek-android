@@ -25,10 +25,12 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -60,9 +62,9 @@ import us.iseek.services.IUserService;
 import us.iseek.services.android.ServicesFactory;
 
 /**
- * A fragment for topic selection.
+ * A fragment for topic topic_selection.
  */
-public class SelectionFragment extends Fragment {
+public class TopicSelectionFragment extends Fragment {
 
     private static final String PENDING_ANNOUNCE_KEY = "pendingAnnounce";
     private static final Uri M_FACEBOOK_URL = Uri.parse("http://m.facebook.com");
@@ -134,7 +136,7 @@ public class SelectionFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.selection, container, false);
+        View view = inflater.inflate(R.layout.topic_selection, container, false);
 
         this.listView = (ListView) view.findViewById(R.id.topic_list);
         this.userScreenName = (TextView) view.findViewById(R.id.userScreenName);
@@ -145,7 +147,15 @@ public class SelectionFragment extends Fragment {
         this.profilePictureView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SelectionFragment.this.activity.showFacebookSettingsFragment();
+                TopicSelectionFragment.this.activity.showFacebookSettingsFragment();
+            }
+        });
+
+        Button startTopicButton = (Button) view.findViewById(R.id.topicSelectionNewTopicButton);
+        startTopicButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TopicSelectionFragment.this.activity.showStartTopicFragment();
             }
         });
 
@@ -194,14 +204,14 @@ public class SelectionFragment extends Fragment {
      */
     public void setUserValues(User user) {
         // Set screen name
-        SelectionFragment.this.userScreenName.setText(user.getScreenName());
+        TopicSelectionFragment.this.userScreenName.setText(user.getScreenName());
 
         // Display user's picture if required
         if (user.getPreferences().isShowProfilePicture()) {
-            SelectionFragment.this.profilePictureView.setProfileId(
+            TopicSelectionFragment.this.profilePictureView.setProfileId(
                     String.valueOf(user.getFacebookProfileId()));
         } else {
-            SelectionFragment.this.profilePictureView.setProfileId(null);
+            TopicSelectionFragment.this.profilePictureView.setProfileId(null);
         }
     }
 
@@ -223,7 +233,7 @@ public class SelectionFragment extends Fragment {
             public void onCompleted(GraphUser user, Response response) {
                 if (session == Session.getActiveSession()) {
                     if (user != null) {
-                        SelectionFragment.this.setFacebookProfileId(user.getId());
+                        TopicSelectionFragment.this.setFacebookProfileId(user.getId());
                     }
                 }
                 if (response.getError() != null) {
@@ -264,8 +274,8 @@ public class SelectionFragment extends Fragment {
             IUserService userService = ServicesFactory.getInstance().createUserService();
 
             // Call web service
-            Location location = new Location(SelectionFragment.this.activity.getLatitude(),
-                    SelectionFragment.this.activity.getLongitude());
+            Location location = new Location(TopicSelectionFragment.this.activity.getLatitude(),
+                    TopicSelectionFragment.this.activity.getLongitude());
             return userService.createUser(params[0], location);
         }
 
@@ -275,21 +285,20 @@ public class SelectionFragment extends Fragment {
         @Override
         protected void onPostExecute(User user) {
             if (user != null) {
-                SelectionFragment.this.activity.setCurrentUser(user);
-                Toast.makeText(SelectionFragment.this.activity,
-                        "Loaded user: " + user.getId(), Toast.LENGTH_LONG).show();
+                Log.d("LOADED_USER", "userId=" + user.getId());
+                TopicSelectionFragment.this.activity.setCurrentUser(user);
 
                 // Set screen name
-                SelectionFragment.this.userScreenName.setText(user.getScreenName());
+                TopicSelectionFragment.this.userScreenName.setText(user.getScreenName());
 
                 // Display user's picture if required
                 if (user.getPreferences().isShowProfilePicture()) {
-                    SelectionFragment.this.profilePictureView.setProfileId(
+                    TopicSelectionFragment.this.profilePictureView.setProfileId(
                             String.valueOf(user.getFacebookProfileId()));
                 }
 
                 // Load topics for user
-                SelectionFragment.this.loadTopicsForUsersLocation(user.getLastLocation());
+                TopicSelectionFragment.this.loadTopicsForUsersLocation(user.getLastLocation());
             }
         }
     }
@@ -330,19 +339,25 @@ public class SelectionFragment extends Fragment {
         @Override
         protected void onPostExecute(List<HashTag> topics) {
             if (topics != null) {
-                Toast.makeText(getActivity(),
-                        "Loaded topics: " + topics, Toast.LENGTH_LONG).show();
+                Log.d("LOADED_TOPICS", "topics=" + topics);
 
                 // Hide progress bar
                 getActivity().findViewById(R.id.progressLayout).setVisibility(View.GONE);
 
-                // Add topics to list
-                for (int i = 0; i < topics.size(); i++) {
-                    HashTag topic = topics.get(i);
-                    SelectionFragment.this.topicElements.add(new PeopleListElement(i, topic));
+                // Verify if there are any topics to display
+                if (topics.isEmpty()) {
+                    // Show no topics text
+                    TopicSelectionFragment.this.activity.findViewById(
+                            R.id.noTopicsLayout).setVisibility(View.VISIBLE);
+                } else {
+                    // Add topics to list
+                    for (int i = 0; i < topics.size(); i++) {
+                        HashTag topic = topics.get(i);
+                        TopicSelectionFragment.this.topicElements.add(new PeopleListElement(i, topic));
+                    }
+                    listView.setAdapter(new ActionListAdapter(
+                            getActivity(), R.id.topic_list, topicElements));
                 }
-                listView.setAdapter(new ActionListAdapter(
-                        getActivity(), R.id.topic_list, topicElements));
             }
         }
     }

@@ -21,6 +21,8 @@ import java.util.List;
 import us.iseek.model.android.HttpException;
 import us.iseek.model.exception.UnknownLocationException;
 import us.iseek.model.gps.Location;
+import us.iseek.model.request.topic.CreateSubscriptionRequest;
+import us.iseek.model.request.user.CreateUserRequest;
 import us.iseek.model.topics.HashTag;
 import us.iseek.model.topics.Subscription;
 import us.iseek.model.user.User;
@@ -76,16 +78,47 @@ public class TopicServiceRestAdapter implements ITopicService {
      * {@inheritDoc}
      */
     @Override
-    public HashTag createTopic(String s) {
-        return null;
+    public HashTag createTopic(String topicName) {
+        // Define connection parameters
+        Log.d("CREATE_TOPIC", "topicName=" + topicName);
+        String createUrl = RestConstants.BASE_URL + TOPIC_PATH + "/create";
+
+        try {
+            // Call web service
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+            HashTag topic = restTemplate.postForObject(createUrl, topicName, HashTag.class);
+            return topic;
+        } catch (Exception e) {
+            Log.e("HTTP_EXCEPTION", "Could not create topic", e);
+            throw new HttpException("Could not create topic", e);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Subscription subscribe(Long aLong, HashTag hashTag) throws UnknownLocationException {
-        return null;
+    public Subscription subscribe(Long userId, HashTag topic) throws UnknownLocationException {
+        // Define connection parameters
+        Log.d("SUBSCRIBE_TO_TOPIC", "userId=" + userId + ", topic=" + topic);
+        String subscribeUrl = RestConstants.BASE_URL + TOPIC_PATH + "/subscription/create";
+
+        // Create subscription request
+        CreateSubscriptionRequest createSubscriptionRequest =
+                new CreateSubscriptionRequest(userId, topic);
+
+        try {
+            // Call web service
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+            Subscription subscription = restTemplate.postForObject(
+                    subscribeUrl, createSubscriptionRequest, Subscription.class);
+            return subscription;
+        } catch (Exception e) {
+            Log.e("HTTP_EXCEPTION", "Could not subscribe to topic", e);
+            throw new HttpException("Could not subscribe to topic", e);
+        }
     }
 
     /**

@@ -66,7 +66,7 @@ public class MenuView extends LinearLayout {
         // Define selected option
         MenuItem selectedMenu = MenuItem.fromSymbol(selectedItem);
         if (selectedMenu == null) {
-            // Default to topic selection
+            // Default to topic topic_selection
             selectedMenu = MenuItem.TOPICS_BUTTON;
         }
 

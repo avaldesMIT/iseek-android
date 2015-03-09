@@ -41,7 +41,7 @@ import us.iseek.android.ISeekApplication;
 
 /**
  * The PickerActivity enhances the Friend or Place Picker by adding a title
- * and a Done button. The selection results are saved in the ISeekApplication
+ * and a Done button. The topic_selection results are saved in the ISeekApplication
  * instance.
  */
 public class PickerActivity extends FragmentActivity {

@@ -65,6 +65,20 @@
 
     <!-- Activity bar separator -->
     <include layout="@layout/separator" />
+    <LinearLayout
+        android:background="@color/background"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <TextView
+            android:id="@+id/selectTopicLabel"
+            android:layout_margin="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/sub_title"
+            android:text="@string/select_topic"  />
+    </LinearLayout>
     <RelativeLayout
         android:id="@+id/progressLayout"
         android:layout_width="fill_parent"
@@ -92,6 +106,39 @@
             android:layout_centerHorizontal="true" />
 
     </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/noTopicsLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/background"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_margin="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/text"
+            android:text="@string/no_topics"  />
+
+        <LinearLayout
+            android:layout_marginLeft="20dp"
+            android:background="@color/button_border"
+            android:layout_width="@dimen/button_width"
+            android:layout_height="@dimen/button_height">
+            <Button
+                android:layout_margin="1dp"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:text="@string/start_topic"
+                android:id="@+id/topicSelectionNewTopicButton"
+                android:background="@color/button_background"
+                android:textColor="@color/button_text"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_gravity="center" />
+        </LinearLayout>
+    </LinearLayout>
 	<ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

@@ -5,6 +5,7 @@ package us.iseek.services.android.rest;
  */
 public class RestConstants {
 
+//    public static final String BASE_URL = "http://10.1.1.232:8080/web-services";
     public static final String BASE_URL = "http://192.168.1.6:8080/web-services";
 
     /**

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  Copyright (C) 2015 iSeek, Inc.
+  All Rights Reserved.
+
+  This software is the confidential and proprietary information of iSeek, Inc.
+  You shall not disclose such confidential information and shall use it only
+  in accordance with the terms of the license agreement you entered into with
+  iSeek, Inc.
+-->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- Title bar -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/title_bar">
+
+        <TextView
+            android:id="@+id/createTopicLabel"
+            android:text="@string/create_topic_title"
+            android:textColor="@color/text"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:gravity="left|center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
+
+    <!-- Activity bar -->
+    <us.iseek.android.view.MenuView
+        android:background="@color/background"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:selectedItem="@string/startTopicButton"/>
+
+    <!-- Activity bar separator -->
+    <include layout="@layout/separator" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/background">
+
+        <LinearLayout android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_width="0px"
+            android:layout_height="0px" >
+            <requestFocus />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/topicNameLabel"
+            android:layout_margin="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/sub_title"
+            android:text="@string/topic_name"  />
+
+        <TextView
+            android:id="@+id/topicErrorLabel"
+            android:layout_margin="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/text"
+            android:text="@string/topic_error"
+            android:visibility="gone"/>
+
+        <EditText
+            android:id="@+id/topicName"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:inputType="textEmailSubject"
+            android:text="@string/default_topic_name"
+            android:ems="10"
+            android:layout_alignParentBottom="true"
+            android:gravity="bottom" />
+
+        <LinearLayout
+            android:id="@+id/createTopicButtonBorder"
+            android:layout_margin="10dp"
+            android:background="@color/button_border"
+            android:layout_width="@dimen/button_width"
+            android:layout_height="@dimen/button_height"
+            android:layout_gravity="center_horizontal">
+            <Button
+                android:layout_margin="1dp"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:text="@string/create_topic_button_text"
+                android:id="@+id/createTopicButton"
+                android:background="@color/button_background"
+                android:textColor="@color/button_text"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_gravity="center" />
+        </LinearLayout>
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_margin="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/startTopicProgressBar"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone" />
+
+        <TextView
+            android:textColor="@color/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/create_topic_progress_bar_text"
+            android:id="@+id/startTopicProgressLabel"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone" />
+    </LinearLayout>
+</LinearLayout>
