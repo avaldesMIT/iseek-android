@@ -227,6 +227,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     public void showTopicSelectionFragment() {
         // Set user's settings
         ((TopicSelectionFragment) this.fragments[SELECTION]).setUserValues(this.currentUser);
+        ((TopicSelectionFragment) this.fragments[SELECTION]).displayUserTopics(this.userTopics);
 
         // Show fragment
         showFragment(SELECTION, true);
@@ -257,6 +258,15 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         }
     }
 
+    /**
+     * Shows the fragment specified by the index provided.
+     *
+     * @param fragmentIndex
+     *                  - The index of the fragment to show.
+     * @param addToBackStack
+     *                  - Determines if the fragment should be added to the back of the
+     *                  fragment trasnaction stack.
+     */
     private void showFragment(int fragmentIndex, boolean addToBackStack) {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();

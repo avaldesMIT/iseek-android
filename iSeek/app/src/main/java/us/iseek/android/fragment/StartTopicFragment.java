@@ -22,6 +22,9 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import us.iseek.android.R;
 import us.iseek.android.activity.MainActivity;
 import us.iseek.model.exception.UnknownLocationException;
@@ -185,8 +188,16 @@ public class StartTopicFragment extends Fragment {
          */
         @Override
         protected void onPostExecute(HashTag topic) {
-            // Automatically subscribe user to topic
             if (topic != null) {
+                // Add topic to list
+                List<HashTag> userTopics = StartTopicFragment.this.activity.getUserTopics();
+                if (userTopics == null) {
+                    userTopics = new ArrayList<HashTag>();
+                    StartTopicFragment.this.activity.setUserTopics(userTopics);
+                }
+                userTopics.add(topic);
+
+                // Automatically subscribe user to topic
                 StartTopicFragment.this.subscribeToTopic(topic);
             }
         }
@@ -241,13 +252,14 @@ public class StartTopicFragment extends Fragment {
         protected void onPostExecute(Subscription subscription) {
             // Set default text and color
             StartTopicFragment.this.topicName.setText(getResources().getString(R.string.default_topic_name));
-            StartTopicFragment.this.topicName.setTextColor(getResources().getColor(R.color.text_disabled));
+            StartTopicFragment.this.topicName.setTextColor(
+                    getResources().getColor(R.color.text_disabled));
 
             // Show start topic button
             StartTopicFragment.this.startTopicButton.setVisibility(View.VISIBLE);
             StartTopicFragment.this.startTopicButton.setVisibility(View.VISIBLE);
 
-            // Show progress information
+            // Hide progress information
             StartTopicFragment.this.startTopicProgressBar.setVisibility(View.GONE);
             StartTopicFragment.this.startTopicProgressLabel.setVisibility(View.GONE);
         }

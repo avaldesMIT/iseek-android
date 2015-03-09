@@ -373,9 +373,10 @@ public class TopicSelectionFragment extends Fragment {
      *              - The topics to display.
      */
     public void displayUserTopics(List<HashTag> topics) {
+        this.topicElements = new ArrayList<TopicListElement>();
         for (int i = 0; i < topics.size(); i++) {
             HashTag topic = topics.get(i);
-            TopicSelectionFragment.this.topicElements.add(new TopicListElement(topic));
+            this.topicElements.add(new TopicListElement(topic));
         }
         listView.setAdapter(new TopicListElementArrayAdapter(
                 getActivity(), R.id.topic_list, topicElements));
