@@ -1,0 +1,5 @@
+<resources>
+    <declare-styleable name="MenuView">
+        <attr name="selectedItem" format="string" />
+    </declare-styleable>
+</resources>

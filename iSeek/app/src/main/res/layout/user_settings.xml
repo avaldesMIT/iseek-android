@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  Copyright (C) 2015 iSeek, Inc.
+  All Rights Reserved.
+
+  This software is the confidential and proprietary information of iSeek, Inc.
+  You shall not disclose such confidential information and shall use it only
+  in accordance with the terms of the license agreement you entered into with
+  iSeek, Inc.
+-->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- Title bar -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/title_bar">
+
+        <TextView
+            android:id="@+id/settingsLabel"
+            android:text="@string/settings_title"
+            android:textColor="@color/text"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:gravity="left|center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
+
+    <!-- Activity bar -->
+    <us.iseek.android.view.MenuView
+        android:background="@color/background"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:selectedItem="@string/settingsButton"/>
+
+    <!-- Activity bar separator -->
+    <include layout="@layout/separator" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/background">
+
+        <LinearLayout android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_width="0px"
+            android:layout_height="0px" >
+            <requestFocus />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/screenNameLabel"
+            android:layout_margin="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/sub_title"
+            android:text="@string/screen_name"  />
+
+        <EditText
+            android:id="@+id/userScreenName"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:inputType="textPersonName"
+            android:text="@string/default_screen_name"
+            android:ems="10"
+            android:layout_alignParentBottom="true"
+            android:gravity="bottom" />
+
+        <include layout="@layout/separator" />
+
+        <TextView
+            android:id="@+id/privacyOptionsLabel"
+            android:layout_margin="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/sub_title"
+            android:text="@string/privacy_options"  />
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <ToggleButton
+                android:id="@+id/showProfilePictureToggle"
+                android:layout_marginLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/showProfilePicLabel"
+                android:layout_margin="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/text"
+                android:text="@string/show_profile_pic"
+                android:layout_toEndOf="@+id/showProfilePictureToggle" />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <ToggleButton
+                android:id="@+id/broadcastLocationToggle"
+                android:layout_marginLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/showDistanceLabel"
+                android:layout_margin="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/text"
+                android:text="@string/broadcast_location"
+                android:layout_toEndOf="@+id/broadcastLocationToggle" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_margin="10dp"
+            android:background="@color/button_border"
+            android:layout_width="@dimen/button_width"
+            android:layout_height="@dimen/button_height"
+            android:layout_gravity="center_horizontal">
+            <Button
+                android:layout_margin="1dp"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:text="@string/saveButtonText"
+                android:id="@+id/saveButton"
+                android:background="@color/button_background"
+                android:textColor="@color/button_text"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_gravity="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_margin="10dp"
+            android:background="@color/button_border"
+            android:layout_width="@dimen/button_width"
+            android:layout_height="@dimen/button_height"
+            android:layout_gravity="center_horizontal">
+            <Button
+                android:layout_margin="1dp"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:text="@string/cancelButtonText"
+                android:id="@+id/cancelButton"
+                android:background="@color/button_background_disabled"
+                android:textColor="@color/button_text_disabled"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_gravity="center" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

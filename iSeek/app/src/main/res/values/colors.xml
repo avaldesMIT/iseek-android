@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="title_bar">#FF4137</color>
+    <color name="background">#FFA9A4</color>
+    <color name="icon_background">#FF0D00</color>
+
+    <color name="text">#BD5145</color>
+    <color name="link">#760600</color>
+    <color name="title">#AB2B24</color>
+    <color name="sub_title">#7E0642</color>
+
+    <color name="button_text">#FFFFFF</color>
+    <color name="button_border">#00E41C</color>
+    <color name="button_background">#005C0B</color>
+    <color name="button_background_hover">#FFFFFF</color>
+    <color name="button_text_disabled">#005C0B</color>
+    <color name="button_background_disabled">#9EF5A8</color>
+
+    <color name="highlight_box_text">#FF4137</color>
+    <color name="highlight_box_border">#FF0D00</color>
+    <color name="highlight_box_background">#FFE3E1</color>
+
+    <color name="menu_item_border">#FFA9A4</color>
+    <color name="menu_item_text_selected">#FFFFFF</color>
+    <color name="menu_item_text_not_selected">#7E0642</color>
+    <color name="menu_item_background_selected">#FF0D00</color>
+    <color name="menu_item_background_not_selected">#FFFFFF</color>
+</resources>

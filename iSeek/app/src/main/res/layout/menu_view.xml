@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+    <ImageView
+        android:id="@+id/topicsButton"
+        android:src="@drawable/topics"
+        android:gravity="center_vertical"
+        android:background="@color/menu_item_background_not_selected"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="1dp"
+        android:layout_centerVertical="true" />
+
+    <ImageView
+        android:id="@+id/topicsButtonSelected"
+        android:src="@drawable/topics_selected"
+        android:gravity="center_vertical"
+        android:background="@color/menu_item_background_selected"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="1dp"
+        android:layout_centerVertical="true" />
+
+    <ImageView
+        android:id="@+id/startTopicButton"
+        android:src="@drawable/start_topic"
+        android:gravity="center_vertical"
+        android:background="@color/menu_item_background_not_selected"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginLeft="1dp"
+        android:layout_marginRight="1dp"
+        android:layout_centerVertical="true" />
+
+    <ImageView
+        android:id="@+id/startTopicButtonSelected"
+        android:src="@drawable/start_topic_selected"
+        android:gravity="center_vertical"
+        android:background="@color/menu_item_background_selected"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginLeft="1dp"
+        android:layout_marginRight="1dp"
+        android:layout_centerVertical="true" />
+
+    <ImageView
+        android:id="@+id/inviteFriendsButton"
+        android:src="@drawable/invite_friends"
+        android:gravity="center_vertical"
+        android:background="@color/menu_item_background_not_selected"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginLeft="1dp"
+        android:layout_marginRight="1dp"
+        android:layout_centerVertical="true" />
+
+    <ImageView
+        android:id="@+id/inviteFriendsButtonSelected"
+        android:src="@drawable/invite_friends_selected"
+        android:gravity="center_vertical"
+        android:background="@color/menu_item_background_selected"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginLeft="1dp"
+        android:layout_marginRight="1dp"
+        android:layout_centerVertical="true" />
+
+    <ImageView
+        android:id="@+id/configureButton"
+        android:src="@drawable/settings"
+        android:gravity="center_vertical"
+        android:background="@color/menu_item_background_not_selected"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginLeft="1dp"
+        android:layout_marginRight="1dp"
+        android:layout_centerVertical="true" />
+
+    <ImageView
+        android:id="@+id/configureButtonSelected"
+        android:src="@drawable/settings_selected"
+        android:gravity="center_vertical"
+        android:background="@color/menu_item_background_selected"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginLeft="1dp"
+        android:layout_marginRight="1dp"
+        android:layout_centerVertical="true" />
+</merge>
