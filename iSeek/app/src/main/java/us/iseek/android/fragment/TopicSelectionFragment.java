@@ -1,24 +1,15 @@
 /**
- * Copyright 2010-present Facebook.
+ * Copyright (C) 2015 iSeek, Inc.
+ * All Rights Reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This software is the confidential and proprietary information of iSeek, Inc.
+ * You shall not disclose such confidential information and shall use it only
+ * in accordance with the terms of the license agreement you entered into with
+ * iSeek, Inc.
  */
-
 package us.iseek.android.fragment;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -29,12 +20,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.FacebookRequestError;
 import com.facebook.Request;
@@ -44,16 +32,16 @@ import com.facebook.SessionDefaultAudience;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
-import com.facebook.model.OpenGraphAction;
 import com.facebook.widget.FacebookDialog;
 import com.facebook.widget.ProfilePictureView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import us.iseek.android.BaseListElement;
-import us.iseek.android.activity.MainActivity;
 import us.iseek.android.R;
+import us.iseek.android.activity.MainActivity;
+import us.iseek.android.view.element.TopicListElement;
+import us.iseek.android.view.element.TopicListElementArrayAdapter;
 import us.iseek.model.gps.Location;
 import us.iseek.model.topics.HashTag;
 import us.iseek.model.user.User;
@@ -73,7 +61,7 @@ public class TopicSelectionFragment extends Fragment {
     private static final String PERMISSION = "publish_actions";
 
     private ListView listView;
-    private List<BaseListElement> topicElements;
+    private List<TopicListElement> topicElements;
 
     private TextView userScreenName;
     private ProfilePictureView profilePictureView;
@@ -119,6 +107,9 @@ public class TopicSelectionFragment extends Fragment {
         }
     };
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,12 +118,18 @@ public class TopicSelectionFragment extends Fragment {
         uiHelper.onCreate(savedInstanceState);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onResume() {
         super.onResume();
         uiHelper.onResume();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -163,32 +160,37 @@ public class TopicSelectionFragment extends Fragment {
         return view;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK && requestCode >= 0 && requestCode < topicElements.size()) {
-            topicElements.get(requestCode).onActivityResult(data);
-        } else {
-            uiHelper.onActivityResult(requestCode, resultCode, data, nativeDialogCallback);
-        }
+        uiHelper.onActivityResult(requestCode, resultCode, data, nativeDialogCallback);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
-        for (BaseListElement listElement : topicElements) {
-            listElement.onSaveInstanceState(bundle);
-        }
         bundle.putBoolean(PENDING_ANNOUNCE_KEY, pendingAnnounce);
         uiHelper.onSaveInstanceState(bundle);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onPause() {
         super.onPause();
         uiHelper.onPause();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -220,14 +222,20 @@ public class TopicSelectionFragment extends Fragment {
             if (state.equals(SessionState.OPENED_TOKEN_UPDATED)) {
                 // Do nothing
             } else {
-                makeMeRequest(session);
+                requestFacebookProfileInformation(session);
             }
         } else {
             profilePictureView.setProfileId(null);
         }
     }
 
-    private void makeMeRequest(final Session session) {
+    /**
+     * Gets the Facebook profile ID from the Facebook session provided.
+     *
+     * @param session
+     *              - The Facebook session to request the user's information from
+     */
+    private void requestFacebookProfileInformation(final Session session) {
         Request request = Request.newMeRequest(session, new Request.GraphUserCallback() {
             @Override
             public void onCompleted(GraphUser user, Response response) {
@@ -350,16 +358,27 @@ public class TopicSelectionFragment extends Fragment {
                     TopicSelectionFragment.this.activity.findViewById(
                             R.id.noTopicsLayout).setVisibility(View.VISIBLE);
                 } else {
-                    // Add topics to list
-                    for (int i = 0; i < topics.size(); i++) {
-                        HashTag topic = topics.get(i);
-                        TopicSelectionFragment.this.topicElements.add(new PeopleListElement(i, topic));
-                    }
-                    listView.setAdapter(new ActionListAdapter(
-                            getActivity(), R.id.topic_list, topicElements));
+                    // Set user's topics
+                    TopicSelectionFragment.this.activity.setUserTopics(topics);
+                    TopicSelectionFragment.this.displayUserTopics(topics);
                 }
             }
         }
+    }
+
+    /**
+     * Displays the topics in a scrollable list with topic icons for each topic.
+     *
+     * @param topics
+     *              - The topics to display.
+     */
+    public void displayUserTopics(List<HashTag> topics) {
+        for (int i = 0; i < topics.size(); i++) {
+            HashTag topic = topics.get(i);
+            TopicSelectionFragment.this.topicElements.add(new TopicListElement(topic));
+        }
+        listView.setAdapter(new TopicListElementArrayAdapter(
+                getActivity(), R.id.topic_list, topicElements));
     }
 
     /**
@@ -367,12 +386,12 @@ public class TopicSelectionFragment extends Fragment {
      */
     private void init(Bundle savedInstanceState) {
         // Initialize list of topics
-        this.topicElements = new ArrayList<BaseListElement>();
+        this.topicElements = new ArrayList<TopicListElement>();
 
         // Get Facebook user information
         Session session = Session.getActiveSession();
         if (session != null && session.isOpened()) {
-            this.makeMeRequest(session);
+            this.requestFacebookProfileInformation(session);
         }
     }
 
@@ -495,106 +514,5 @@ public class TopicSelectionFragment extends Fragment {
                 .setTitle(title)
                 .setMessage(message)
                 .show();
-    }
-
-
-    private class PeopleListElement extends BaseListElement {
-
-        private HashTag topic;
-
-        /**
-         * Creates a new instance of this.
-         *
-         * @param requestCode
-         *              - The request code to map this element to
-         * @param topic
-         *              - This element's topic
-         */
-        public PeopleListElement(int requestCode, HashTag topic) {
-            super(getActivity().getResources().getDrawable(R.drawable.topic),
-                    topic.getDisplayName(),
-                    null,
-                    requestCode);
-
-            // Set topic
-            this.topic = topic;
-        }
-
-        @Override
-        public View.OnClickListener getOnClickListener() {
-            return new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // Enter topic
-                }
-            };
-        }
-
-        @Override
-        public void onActivityResult(Intent data) {
-            // Don't need to do anything
-        }
-
-        @Override
-        protected void populateOGAction(OpenGraphAction action) {
-            // Don't need to do anything
-        }
-
-        @Override
-        public void onSaveInstanceState(Bundle bundle) {
-            // Don't need to do anything
-        }
-
-        @Override
-        protected boolean restoreState(Bundle savedState) {
-            // Don't need to do anything
-            return false;
-        }
-    }
-
-    private class ActionListAdapter extends ArrayAdapter<BaseListElement> {
-        private List<BaseListElement> listElements;
-
-        public ActionListAdapter(Context context, int resourceId, List<BaseListElement> listElements) {
-            super(context, resourceId, listElements);
-            this.listElements = listElements;
-            for (int i = 0; i < listElements.size(); i++) {
-                listElements.get(i).setAdapter(this);
-            }
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View view = convertView;
-            if (view == null) {
-                LayoutInflater inflater =
-                        (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                view = inflater.inflate(R.layout.listitem, null);
-            }
-
-            BaseListElement listElement = listElements.get(position);
-            if (listElement != null) {
-                view.setOnClickListener(listElement.getOnClickListener());
-                ImageView icon = (ImageView) view.findViewById(R.id.icon);
-                TextView text1 = (TextView) view.findViewById(R.id.text1);
-                TextView text2 = (TextView) view.findViewById(R.id.text2);
-                if (icon != null) {
-                    icon.setImageDrawable(listElement.getIcon());
-                }
-                if (text1 != null) {
-                    text1.setText(listElement.getText1());
-                }
-                if (text2 != null) {
-                    if (listElement.getText2() != null) {
-                        text2.setVisibility(View.VISIBLE);
-                        text2.setText(listElement.getText2());
-                    } else {
-                        text2.setVisibility(View.GONE);
-                    }
-                }
-            }
-            return view;
-        }
-
     }
 }

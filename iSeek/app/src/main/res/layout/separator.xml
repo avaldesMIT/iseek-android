@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  Copyright (C) 2015 iSeek, Inc.
+  All Rights Reserved.
+
+  This software is the confidential and proprietary information of iSeek, Inc.
+  You shall not disclose such confidential information and shall use it only
+  in accordance with the terms of the license agreement you entered into with
+  iSeek, Inc.
+-->
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="1px"
     android:layout_width="fill_parent"

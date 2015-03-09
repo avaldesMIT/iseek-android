@@ -21,12 +21,10 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import us.iseek.android.R;
 import us.iseek.android.activity.MainActivity;
 import us.iseek.model.exception.UnknownLocationException;
-import us.iseek.model.request.topic.CreateSubscriptionRequest;
 import us.iseek.model.topics.HashTag;
 import us.iseek.model.topics.Subscription;
 import us.iseek.services.ITopicService;
@@ -35,6 +33,9 @@ import us.iseek.services.android.ServicesFactory;
 
 /**
  * A fragment that allows the user to start a new topic of conversation.
+ *
+ * @author Armando Valdes
+ * @since 1.0
  */
 public class StartTopicFragment extends Fragment {
     private MainActivity activity;

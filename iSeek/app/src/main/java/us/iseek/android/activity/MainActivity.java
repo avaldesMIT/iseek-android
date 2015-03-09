@@ -1,19 +1,12 @@
 /**
- * Copyright 2010-present Facebook.
+ * Copyright (C) 2015 iSeek, Inc.
+ * All Rights Reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This software is the confidential and proprietary information of iSeek, Inc.
+ * You shall not disclose such confidential information and shall use it only
+ * in accordance with the terms of the license agreement you entered into with
+ * iSeek, Inc.
  */
-
 package us.iseek.android.activity;
 
 import android.content.Intent;
@@ -41,34 +34,45 @@ import com.google.android.gms.location.LocationServices;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 import us.iseek.android.R;
 import us.iseek.android.fragment.TopicSelectionFragment;
 import us.iseek.android.fragment.UserSettingsFragment;
 import us.iseek.model.android.MenuItem;
+import us.iseek.model.topics.HashTag;
 import us.iseek.model.user.User;
 
+/**
+ * Defines the main activity of the application. This activity contains fragments that allow
+ * the user to view topics being discussed in his/her immediate location, start new topics,
+ * and participate in the discussion.
+ */
 public class MainActivity extends FragmentActivity implements ConnectionCallbacks,
         OnConnectionFailedListener, MenuDisplayingActivity {
 
-    private static final String USER_SKIPPED_LOGIN_KEY = "user_skipped_login";
-
+    // Index of fragments contained in the activity
     private static final int SPLASH = 0;
     private static final int SELECTION = 1;
     private static final int SETTINGS = 2;
     private static final int USER_SETTINGS = 3;
     private static final int START_TOPIC = 4;
     private static final int FRAGMENT_COUNT = START_TOPIC + 1;
+    private Fragment[] fragments = new Fragment[FRAGMENT_COUNT];
 
     // Current user
     private User currentUser;
+
+    // Current topics
+    private HashTag selectedTopic;
+    private List<HashTag> userTopics;
 
     // Location aware variables
     private Double latitude;
     private Double longitude;
     private GoogleApiClient googleApiClient;
 
-    private Fragment[] fragments = new Fragment[FRAGMENT_COUNT];
+    // Facebook's UI lifecycle support
     private boolean isResumed = false;
     private UiLifecycleHelper uiHelper;
     private Session.StatusCallback callback = new Session.StatusCallback() {
@@ -78,13 +82,16 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         }
     };
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        PackageInfo info = null;
         try {
-            info = getPackageManager().getPackageInfo(getPackageName(),  PackageManager.GET_SIGNATURES);
+            // TODO: Remove code for final release version
+            PackageInfo info = getPackageManager().getPackageInfo(getPackageName(),  PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures)
             {
                 MessageDigest md = MessageDigest.getInstance("SHA");
@@ -97,6 +104,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
             e.printStackTrace();
         }
 
+        // Get location information
         this.googleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -104,11 +112,12 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
                 .build();
         this.googleApiClient.connect();
 
+        // Initialize Facebook session UI lifecycle management
         uiHelper = new UiLifecycleHelper(this, callback);
         uiHelper.onCreate(savedInstanceState);
-
         setContentView(R.layout.main);
 
+        // Initialize fragments
         FragmentManager fm = getSupportFragmentManager();
         fragments[SPLASH] = fm.findFragmentById(R.id.splashFragment);;
         fragments[SELECTION] = fm.findFragmentById(R.id.selectionFragment);
@@ -116,6 +125,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         fragments[USER_SETTINGS] = fm.findFragmentById(R.id.userSettingsFragment);
         fragments[START_TOPIC] = fm.findFragmentById(R.id.startTopicFragment);
 
+        // Hide fragments
         FragmentTransaction transaction = fm.beginTransaction();
         for(int i = 0; i < fragments.length; i++) {
             transaction.hide(fragments[i]);
@@ -123,53 +133,69 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         transaction.commit();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onResume() {
         super.onResume();
         uiHelper.onResume();
         isResumed = true;
 
-        // Call the 'activateApp' method to log an app event for use in analytics and advertising reporting.  Do so in
-        // the onResume methods of the primary Activities that an app may be launched into.
+        // Log application activation for analytics/ads
         AppEventsLogger.activateApp(this);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onPause() {
         super.onPause();
         uiHelper.onPause();
         isResumed = false;
 
-        // Call the 'deactivateApp' method to log an app event for use in analytics and advertising
-        // reporting.  Do so in the onPause methods of the primary Activities that an app may be launched into.
+        // Log application deactivation for analytics/ads
         AppEventsLogger.deactivateApp(this);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         uiHelper.onActivityResult(requestCode, resultCode, data);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
         uiHelper.onDestroy();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         uiHelper.onSaveInstanceState(outState);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void onResumeFragments() {
         super.onResumeFragments();
         Session session = Session.getActiveSession();
 
         if (session != null && session.isOpened()) {
-            // If the session is already open, show the topic topic_selection fragment
+            // If the session is already open, show the topic selection fragment
             showFragment(SELECTION, false);
         } else {
             // Otherwise show the splash screen with the Facebook Login option
@@ -306,10 +332,48 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     /**
      * Gets the current user
      *
-     * @return The the current user.
+     * @return The currentUser.
      */
     public User getCurrentUser() {
         return this.currentUser;
+    }
+
+    /**
+     * Sets the user's topics
+     *
+     * @param userTopics
+     *              - The userTopics to set
+     */
+    public void setUserTopics(List<HashTag> userTopics) {
+        this.userTopics = userTopics;
+    }
+
+    /**
+     * Gets the user's topics.
+     *
+     * @return the userTopics.
+     */
+    public List<HashTag> getUserTopics() {
+        return this.userTopics;
+    }
+
+    /**
+     * Sets the selected topics
+     *
+     * @param selectedTopic
+     *              - The selectedTopic to set
+     */
+    public void setSelectedTopic(HashTag selectedTopic) {
+        this.selectedTopic = selectedTopic;
+    }
+
+    /**
+     * Gets the selected topic.
+     *
+     * @return the selectedTopic.
+     */
+    public HashTag getSelectedTopic() {
+        return this.selectedTopic;
     }
 
     /**
