@@ -376,25 +376,38 @@ public class TopicSelectionFragment extends Fragment {
      *              - The topics to display.
      */
     public void displayUserTopics(List<HashTag> topics) {
+        // Reset topics
         this.topicElements = new ArrayList<TopicListElement>();
-        for (int i = 0; i < topics.size(); i++) {
-            // Create topic list element from topic
-            final HashTag topic = topics.get(i);
-            TopicListElement topicListElement = new TopicListElement(topic);
 
-            // Add on click listener to element
-            topicListElement.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    TopicSelectionFragment.this.activity.setSelectedTopic(topic);
-                }
-            });
+        // Determine if there are any topics to set
+        if (topics == null || topics.isEmpty()) {
+            TopicSelectionFragment.this.activity.findViewById(
+                    R.id.noTopicsLayout).setVisibility(View.VISIBLE);
+        } else {
+            // Hide no topics message
+            TopicSelectionFragment.this.activity.findViewById(
+                    R.id.noTopicsLayout).setVisibility(View.GONE);
 
-            // Add element to list
-            this.topicElements.add(topicListElement);
+            // Set topics
+            for (int i = 0; i < topics.size(); i++) {
+                // Create topic list element from topic
+                final HashTag topic = topics.get(i);
+                TopicListElement topicListElement = new TopicListElement(topic);
+
+                // Add on click listener to element
+                topicListElement.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        TopicSelectionFragment.this.activity.setSelectedTopic(topic);
+                    }
+                });
+
+                // Add element to list
+                this.topicElements.add(topicListElement);
+            }
+            listView.setAdapter(new TopicListElementArrayAdapter(
+                    getActivity(), R.id.topic_list, topicElements));
         }
-        listView.setAdapter(new TopicListElementArrayAdapter(
-                getActivity(), R.id.topic_list, topicElements));
     }
 
     /**
