@@ -254,7 +254,9 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
      */
     public void showChatFragment() {
         // Set topic's display name
-        ((ChatFragment) fragments[CHAT]).displayTopicName(this.selectedTopic);
+        if (this.selectedTopic != null) {
+            ((ChatFragment) fragments[CHAT]).displayTopicName(this.selectedTopic);
+        }
 
         // Show fragment
         this.showFragment(CHAT, true);

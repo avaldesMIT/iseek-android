@@ -269,6 +269,9 @@ public class StartTopicFragment extends Fragment {
         protected void onPostExecute(Subscription subscription) {
             // Reset UI elements
             StartTopicFragment.this.resetView();
+
+            // Show newly created topic
+            StartTopicFragment.this.activity.setSelectedTopic(subscription.getTopic());
         }
     }
 }
