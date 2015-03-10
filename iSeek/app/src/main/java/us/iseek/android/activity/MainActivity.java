@@ -34,6 +34,7 @@ import com.google.android.gms.location.LocationServices;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 
 import us.iseek.android.R;
@@ -57,7 +58,8 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     private static final int SETTINGS = 2;
     private static final int USER_SETTINGS = 3;
     private static final int START_TOPIC = 4;
-    private static final int FRAGMENT_COUNT = START_TOPIC + 1;
+    private static final int CHAT = 5;
+    private static final int FRAGMENT_COUNT = CHAT + 1;
     private Fragment[] fragments = new Fragment[FRAGMENT_COUNT];
 
     // Current user
@@ -124,6 +126,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         fragments[SETTINGS] = fm.findFragmentById(R.id.facebookSettingsFragment);
         fragments[USER_SETTINGS] = fm.findFragmentById(R.id.userSettingsFragment);
         fragments[START_TOPIC] = fm.findFragmentById(R.id.startTopicFragment);
+        fragments[CHAT] = fm.findFragmentById(R.id.chatFragment);
 
         // Hide fragments
         FragmentTransaction transaction = fm.beginTransaction();
@@ -218,19 +221,23 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         ((UserSettingsFragment) this.fragments[USER_SETTINGS]).setUserValues(this.currentUser);
 
         // Show fragment
-        showFragment(USER_SETTINGS, true);
+        this.showFragment(USER_SETTINGS, true);
     }
 
     /**
      * Shows the topic topic_selection fragment
      */
     public void showTopicSelectionFragment() {
+        if(this.userTopics == null) {
+            this.userTopics = new ArrayList<HashTag>();
+        }
+
         // Set user's settings
         ((TopicSelectionFragment) this.fragments[SELECTION]).setUserValues(this.currentUser);
         ((TopicSelectionFragment) this.fragments[SELECTION]).displayUserTopics(this.userTopics);
 
         // Show fragment
-        showFragment(SELECTION, true);
+        this.showFragment(SELECTION, true);
     }
 
     /**
@@ -238,9 +245,27 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
      */
     public void showStartTopicFragment() {
         // Show fragment
-        showFragment(START_TOPIC, true);
+        this.showFragment(START_TOPIC, true);
     }
 
+    /**
+     * Shows the
+     */
+    public void showChatFragment() {
+        // Show fragment
+        this.showFragment(CHAT, true);
+    }
+
+    /**
+     * Handles Facebook session state changes.
+     *
+     * @param session
+     *              - The Facebook session
+     * @param state
+     *              - The new state
+     * @param exception
+     *              - Any exception resulting from the change in state
+     */
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
         if (isResumed) {
             FragmentManager manager = getSupportFragmentManager();
@@ -250,10 +275,10 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
             }
             // check for the OPENED state instead of session.isOpened() since for the
             // OPENED_TOKEN_UPDATED state, the topic_selection fragment should already be showing.
-            if (state.equals(SessionState.OPENED)) {
-                showFragment(SELECTION, false);
+            if (SessionState.OPENED.equals(state)) {
+                this.showFragment(SELECTION, false);
             } else if (state.isClosed()) {
-                showFragment(SPLASH, false);
+                this.showFragment(SPLASH, false);
             }
         }
     }
@@ -375,6 +400,9 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
      */
     public void setSelectedTopic(HashTag selectedTopic) {
         this.selectedTopic = selectedTopic;
+
+        // Show chat screen for this topic
+        this.showChatFragment();
     }
 
     /**
@@ -401,6 +429,9 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
                 break;
             case START_TOPIC_BUTTON:
                 this.showStartTopicFragment();
+                break;
+            case CHAT_BUTTON:
+                this.showChatFragment();
                 break;
         }
     }

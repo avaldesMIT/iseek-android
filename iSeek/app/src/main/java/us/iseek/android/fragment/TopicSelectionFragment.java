@@ -50,7 +50,10 @@ import us.iseek.services.IUserService;
 import us.iseek.services.android.ServicesFactory;
 
 /**
- * A fragment for topic topic_selection.
+ * A fragment that allows the user to select topics of conversation.
+ *
+ * @author Armando Valdes
+ * @since 1.0
  */
 public class TopicSelectionFragment extends Fragment {
 
@@ -375,8 +378,20 @@ public class TopicSelectionFragment extends Fragment {
     public void displayUserTopics(List<HashTag> topics) {
         this.topicElements = new ArrayList<TopicListElement>();
         for (int i = 0; i < topics.size(); i++) {
-            HashTag topic = topics.get(i);
-            this.topicElements.add(new TopicListElement(topic));
+            // Create topic list element from topic
+            final HashTag topic = topics.get(i);
+            TopicListElement topicListElement = new TopicListElement(topic);
+
+            // Add on click listener to element
+            topicListElement.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    TopicSelectionFragment.this.activity.setSelectedTopic(topic);
+                }
+            });
+
+            // Add element to list
+            this.topicElements.add(topicListElement);
         }
         listView.setAdapter(new TopicListElementArrayAdapter(
                 getActivity(), R.id.topic_list, topicElements));

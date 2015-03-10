@@ -46,5 +46,10 @@
         android:id="@+id/startTopicFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+    <fragment
+        android:name="us.iseek.android.fragment.ChatFragment"
+        android:id="@+id/chatFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </LinearLayout>
 

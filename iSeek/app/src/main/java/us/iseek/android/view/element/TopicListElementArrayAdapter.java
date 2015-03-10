@@ -21,7 +21,8 @@ import java.util.List;
 import us.iseek.android.R;
 
 /**
- * An array adapter for TopicListElements. Inflates the layout and provides
+ * An array adapter for TopicListElements. Inflates the layout and sets the TopicListElement
+ * on click listeners to the container.
  *
  * @author Armando Valdes
  * @since 1.0

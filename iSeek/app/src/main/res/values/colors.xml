@@ -3,6 +3,7 @@
 	<color name="title_bar">#FF4137</color>
     <color name="background">#FFA9A4</color>
     <color name="icon_background">#FF0D00</color>
+    <color name="chat_background">#FFFFFF</color>
 
     <color name="text">#BD5145</color>
     <color name="link">#760600</color>

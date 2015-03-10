@@ -52,7 +52,8 @@
         android:orientation="vertical"
         android:background="@color/background">
 
-        <LinearLayout android:focusable="true"
+        <LinearLayout
+            android:focusable="true"
             android:focusableInTouchMode="true"
             android:layout_width="0px"
             android:layout_height="0px" >
