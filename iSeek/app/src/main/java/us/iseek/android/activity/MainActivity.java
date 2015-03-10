@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import us.iseek.android.R;
+import us.iseek.android.fragment.ChatFragment;
 import us.iseek.android.fragment.TopicSelectionFragment;
 import us.iseek.android.fragment.UserSettingsFragment;
 import us.iseek.model.android.MenuItem;
@@ -252,6 +253,9 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
      * Shows the
      */
     public void showChatFragment() {
+        // Set topic's display name
+        ((ChatFragment) fragments[CHAT]).displayTopicName(this.selectedTopic);
+
         // Show fragment
         this.showFragment(CHAT, true);
     }

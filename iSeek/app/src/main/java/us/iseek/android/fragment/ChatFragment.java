@@ -114,6 +114,16 @@ public class ChatFragment extends Fragment {
     }
 
     /**
+     * Displays the topic name
+     *
+     * @param topic
+     *              - The topic to display
+     */
+    public void displayTopicName(HashTag topic) {
+        this.topicName.setText(topic.getDisplayName());
+    }
+
+    /**
      * Sends a message.
      */
     private class SendMessageTask extends AsyncTask<String, Void, Void> {
