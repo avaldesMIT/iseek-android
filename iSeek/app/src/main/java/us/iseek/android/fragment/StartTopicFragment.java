@@ -9,6 +9,7 @@
  */
 package us.iseek.android.fragment;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -50,13 +52,6 @@ public class StartTopicFragment extends Fragment {
     private TextView startTopicProgressLabel;
     private ProgressBar startTopicProgressBar;
     private LinearLayout startTopicButtonBorder;
-
-    /**
-     * Creates a new instance of this.
-     */
-    public StartTopicFragment() {
-        // Required empty public constructor
-    }
 
     /**
      * {@inheritDoc}
@@ -102,6 +97,10 @@ public class StartTopicFragment extends Fragment {
         this.startTopicButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Clear focus
+                StartTopicFragment.this.topicName.clearFocus();
+                StartTopicFragment.this.hideKeyword();
+
                 // Get topic text
                 String newTopic = StartTopicFragment.this.topicName.getText().toString();
 
@@ -116,6 +115,16 @@ public class StartTopicFragment extends Fragment {
 
         // Return newly created view
         return view;
+    }
+
+    /**
+     * Hides the keyword
+     */
+    private void hideKeyword() {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) this.activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(
+                this.activity.getCurrentFocus().getWindowToken(), 0);
     }
 
     /**
@@ -149,13 +158,21 @@ public class StartTopicFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
+        // Reset UI elements
+        this.resetView();
+    }
+
+    /**
+     * Resets the view UI elements.
+     */
+    private void resetView() {
         // Set default text and color
         this.topicName.setText(getResources().getString(R.string.default_topic_name));
         this.topicName.setTextColor(getResources().getColor(R.color.text_disabled));
 
         // Show start topic button
         this.startTopicButton.setVisibility(View.VISIBLE);
-        this.startTopicButton.setVisibility(View.VISIBLE);
+        this.startTopicButtonBorder.setVisibility(View.VISIBLE);
 
         // Hide progress bar
         this.startTopicProgressBar.setVisibility(View.GONE);
@@ -250,18 +267,8 @@ public class StartTopicFragment extends Fragment {
          */
         @Override
         protected void onPostExecute(Subscription subscription) {
-            // Set default text and color
-            StartTopicFragment.this.topicName.setText(getResources().getString(R.string.default_topic_name));
-            StartTopicFragment.this.topicName.setTextColor(
-                    getResources().getColor(R.color.text_disabled));
-
-            // Show start topic button
-            StartTopicFragment.this.startTopicButton.setVisibility(View.VISIBLE);
-            StartTopicFragment.this.startTopicButton.setVisibility(View.VISIBLE);
-
-            // Hide progress information
-            StartTopicFragment.this.startTopicProgressBar.setVisibility(View.GONE);
-            StartTopicFragment.this.startTopicProgressLabel.setVisibility(View.GONE);
+            // Reset UI elements
+            StartTopicFragment.this.resetView();
         }
     }
 }
