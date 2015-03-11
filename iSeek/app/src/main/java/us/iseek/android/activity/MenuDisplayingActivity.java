@@ -9,7 +9,7 @@
  */
 package us.iseek.android.activity;
 
-import us.iseek.model.android.MenuItem;
+import us.iseek.model.android.enums.MenuItem;
 
 /**
  * An activity that provides call backs to navigate to the menu item selected to the user.

@@ -55,6 +55,14 @@ public class TopicService implements ITopicService {
      * {@inheritDoc}
      */
     @Override
+    public Subscription findSubscription(Long userId, Long topicId) {
+        return this.restAdapter.findSubscription(userId, topicId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Subscription subscribe(Long userId, HashTag hashTag) throws UnknownLocationException {
         return this.restAdapter.subscribe(userId, hashTag);
     }

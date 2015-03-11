@@ -18,11 +18,10 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
-import us.iseek.model.android.HttpException;
+import us.iseek.model.android.exceptions.HttpException;
 import us.iseek.model.exception.UnknownLocationException;
 import us.iseek.model.gps.Location;
 import us.iseek.model.request.topic.CreateSubscriptionRequest;
-import us.iseek.model.request.user.CreateUserRequest;
 import us.iseek.model.topics.HashTag;
 import us.iseek.model.topics.Subscription;
 import us.iseek.model.user.User;
@@ -95,6 +94,28 @@ public class TopicServiceRestAdapter implements ITopicService {
         }
     }
 
+    @Override
+    public Subscription findSubscription(Long userId, Long topicId) {
+        // Define connection parameters
+        Log.d("FIND_SUBSCRIPTION",
+                "userId=" + userId + ", topicId=" + topicId);
+        String findSubscriptionsUrl = RestConstants.BASE_URL + TOPIC_PATH + "/subscription/find"
+                + "?userId=" + userId
+                + "&topicId=" + topicId;
+
+        try {
+            // Call web service
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+            Subscription subscription =
+                    restTemplate.getForObject(findSubscriptionsUrl, Subscription.class);
+            return subscription;
+        } catch (Exception e) {
+            Log.e("HTTP_EXCEPTION", "Could not find subscription", e);
+            throw new HttpException("Could not find subscription", e);
+        }
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -125,8 +146,22 @@ public class TopicServiceRestAdapter implements ITopicService {
      * {@inheritDoc}
      */
     @Override
-    public Subscription renewSubscription(Long aLong) {
-        return null;
+    public Subscription renewSubscription(Long subscriptionId) {
+        // Define connection parameters
+        Log.d("RENEW_SUBSCRIPTION", "subscriptionId=" + subscriptionId);
+        String renewSubscriptionUrl = RestConstants.BASE_URL + TOPIC_PATH + "/subscription/renew";
+
+        try {
+            // Call web service
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+            Subscription subscription = restTemplate.postForObject(
+                    renewSubscriptionUrl, subscriptionId, Subscription.class);
+            return subscription;
+        } catch (Exception e) {
+            Log.e("HTTP_EXCEPTION", "Could not renew subscription to topic", e);
+            throw new HttpException("Could not renew subscription to topic", e);
+        }
     }
 
     /**

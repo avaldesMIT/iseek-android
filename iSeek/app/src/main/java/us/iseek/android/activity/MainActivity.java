@@ -41,7 +41,7 @@ import us.iseek.android.R;
 import us.iseek.android.fragment.ChatFragment;
 import us.iseek.android.fragment.TopicSelectionFragment;
 import us.iseek.android.fragment.UserSettingsFragment;
-import us.iseek.model.android.MenuItem;
+import us.iseek.model.android.enums.MenuItem;
 import us.iseek.model.topics.HashTag;
 import us.iseek.model.user.User;
 

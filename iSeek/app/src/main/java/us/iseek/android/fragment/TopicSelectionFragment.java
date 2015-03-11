@@ -42,8 +42,11 @@ import us.iseek.android.R;
 import us.iseek.android.activity.MainActivity;
 import us.iseek.android.view.element.TopicListElement;
 import us.iseek.android.view.element.TopicListElementArrayAdapter;
+import us.iseek.managers.android.SubscriptionManager;
+import us.iseek.model.android.callbacks.RequestCallback;
 import us.iseek.model.gps.Location;
 import us.iseek.model.topics.HashTag;
+import us.iseek.model.topics.Subscription;
 import us.iseek.model.user.User;
 import us.iseek.services.ITopicService;
 import us.iseek.services.IUserService;
@@ -55,7 +58,7 @@ import us.iseek.services.android.ServicesFactory;
  * @author Armando Valdes
  * @since 1.0
  */
-public class TopicSelectionFragment extends Fragment {
+public class TopicSelectionFragment extends Fragment implements RequestCallback<Subscription> {
 
     private static final String PENDING_ANNOUNCE_KEY = "pendingAnnounce";
     private static final Uri M_FACEBOOK_URL = Uri.parse("http://m.facebook.com");
@@ -266,6 +269,14 @@ public class TopicSelectionFragment extends Fragment {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void success(Subscription result) {
+        // No action is required
+    }
+
+    /**
      * Gets the iSeek user based on the facebook profile ID provided. If the user doesn't already
      * exist, this task will create a user with default preferences and return the newly created
      * user.
@@ -398,7 +409,7 @@ public class TopicSelectionFragment extends Fragment {
                 topicListElement.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        TopicSelectionFragment.this.activity.setSelectedTopic(topic);
+                        TopicSelectionFragment.this.handleSelectTopic(topic);
                     }
                 });
 
@@ -408,6 +419,21 @@ public class TopicSelectionFragment extends Fragment {
             listView.setAdapter(new TopicListElementArrayAdapter(
                     getActivity(), R.id.topic_list, topicElements));
         }
+    }
+
+    /**
+     * Selects the topic provided. Subscribes the user to the selected topic.
+     *
+     * @param topic
+     *              - The selected topic
+     */
+    private void handleSelectTopic(HashTag topic) {
+        // Subscribe user to topic
+        SubscriptionManager.getInstance().subscribeUser(
+                this.activity.getCurrentUser(), topic, this);
+
+        // Set selected topic
+        TopicSelectionFragment.this.activity.setSelectedTopic(topic);
     }
 
     /**

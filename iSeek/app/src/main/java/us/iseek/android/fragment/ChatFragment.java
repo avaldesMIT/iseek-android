@@ -10,6 +10,7 @@
 package us.iseek.android.fragment;
 
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,10 +18,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
+import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -28,12 +30,14 @@ import java.util.List;
 
 import us.iseek.android.R;
 import us.iseek.android.activity.MainActivity;
+import us.iseek.android.view.element.ChatElement;
+import us.iseek.android.view.element.ChatElementArrayAdapter;
+import us.iseek.android.view.element.TopicListElementArrayAdapter;
 import us.iseek.model.communication.PublicMessage;
 import us.iseek.model.exception.UnsupportedMessageTypeException;
 import us.iseek.model.topics.HashTag;
 import us.iseek.model.user.User;
 import us.iseek.services.IMessageService;
-import us.iseek.services.ITopicService;
 import us.iseek.services.android.ServicesFactory;
 
 
@@ -51,7 +55,10 @@ public class ChatFragment extends Fragment {
     private Button sendButton;
     private EditText chatText;
     private TextView topicName;
-    private TextView chatHistory;
+
+    private ListView chatHistoryList;
+    private ScrollView chatScrollView;
+    private List<ChatElement> chatMessages;
 
     /**
      * {@inheritDoc}
@@ -75,7 +82,10 @@ public class ChatFragment extends Fragment {
         this.chatText = (EditText) view.findViewById(R.id.chatText);
         this.topicName = (TextView) view.findViewById(R.id.chatTopicName);
         this.sendButton = (Button) view.findViewById(R.id.sendButton);
-        this.chatHistory = (TextView) view.findViewById(R.id.chatHistory);
+        this.chatScrollView = (ScrollView) view.findViewById(R.id.chatScrollView);
+        this.chatHistoryList = (ListView) view.findViewById(R.id.chatHistoryList);
+
+        this.chatMessages = new ArrayList<ChatElement>();
 
         // Set topic name listeners
         this.chatText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -95,22 +105,63 @@ public class ChatFragment extends Fragment {
         this.sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Get chat text
-                String newTopic = ChatFragment.this.chatText.getText().toString();
-
-                // Clear chat field
-                ChatFragment.this.chatText.setText(
-                        getResources().getString(R.string.default_chat_text));
-                ChatFragment.this.chatText.setTextColor(
-                        getResources().getColor(R.color.text_disabled));
-
-                // Send message
-                new SendMessageTask().execute(newTopic);
+                ChatFragment.this.sendMessage();
             }
         });
 
         // Return newly created view
         return view;
+    }
+
+    /**
+     * Processes the send message action
+     */
+    private void sendMessage() {
+        // Clear text field focus and hide keyboard
+        this.chatText.clearFocus();
+        this.hideKeyword();
+
+        this.chatScrollView.post(new Runnable() {
+            @Override
+            public void run() {
+                ChatFragment.this.chatScrollView.fullScroll(View.FOCUS_DOWN);
+            }
+        });
+
+        // Get chat text
+        String message = this.chatText.getText().toString();
+
+        // Clear chat field
+        this.chatText.setText(getResources().getString(R.string.default_chat_text));
+        this.chatText.setTextColor(getResources().getColor(R.color.text_disabled));
+
+        // Send message
+        new SendMessageTask().execute(message);
+
+        // Show message
+        this.displayMessage(message);
+    }
+
+    /**
+     * Displays the message provided on the screen.
+     *
+     * @param message
+     *              - The message to display
+     */
+    private void displayMessage(String message) {
+        // Add message to list
+        this.chatMessages.add(new ChatElement(
+                this.activity.getCurrentUser().getScreenName(),
+                message, false));
+
+        // TODO: Remove code for testing
+        this.chatMessages.add(new ChatElement(
+                "Respondent",
+                "Really?", true));
+
+        // Draw message to end
+        this.chatHistoryList.setAdapter(new ChatElementArrayAdapter(
+                getActivity(), R.id.chatHistoryList, this.chatMessages));
     }
 
     /**
@@ -121,6 +172,16 @@ public class ChatFragment extends Fragment {
      */
     public void displayTopicName(HashTag topic) {
         this.topicName.setText(topic.getDisplayName());
+    }
+
+    /**
+     * Hides the keyword
+     */
+    private void hideKeyword() {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) this.activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(
+                this.activity.getCurrentFocus().getWindowToken(), 0);
     }
 
     /**

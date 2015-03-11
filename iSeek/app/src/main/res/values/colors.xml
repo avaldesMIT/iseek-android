@@ -3,13 +3,16 @@
 	<color name="title_bar">#FF4137</color>
     <color name="background">#FFA9A4</color>
     <color name="icon_background">#FF0D00</color>
-    <color name="chat_background">#FFFFFF</color>
+    <color name="chat_background">#FFE3E1</color>
 
     <color name="text">#BD5145</color>
     <color name="link">#760600</color>
     <color name="title">#AB2B24</color>
     <color name="sub_title">#7E0642</color>
     <color name="text_disabled">#D0D0D0</color>
+
+    <color name="sent_message_text">#FFE3E1</color>
+    <color name="received_message_text">#005C0B</color>
 
     <color name="button_text">#FFFFFF</color>
     <color name="button_border">#00E41C</color>

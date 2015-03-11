@@ -7,7 +7,7 @@
  * in accordance with the terms of the license agreement you entered into with
  * iSeek, Inc.
  */
-package us.iseek.model.android;
+package us.iseek.model.android.enums;
 
 import java.util.EnumSet;
 

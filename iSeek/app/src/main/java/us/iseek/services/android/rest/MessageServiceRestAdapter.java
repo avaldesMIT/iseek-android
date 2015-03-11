@@ -14,13 +14,12 @@ import android.util.Log;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
-import us.iseek.model.android.HttpException;
+import us.iseek.model.android.exceptions.HttpException;
 import us.iseek.model.communication.Message;
 import us.iseek.model.communication.PrivateMessage;
 import us.iseek.model.communication.PublicMessage;
 import us.iseek.model.enums.MessageType;
 import us.iseek.model.exception.UnsupportedMessageTypeException;
-import us.iseek.model.topics.HashTag;
 import us.iseek.services.IMessageService;
 
 /**

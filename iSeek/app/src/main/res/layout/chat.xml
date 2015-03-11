@@ -91,13 +91,28 @@
 
         </RelativeLayout>
 
-        <TextView
+        <ScrollView
+            android:id="@+id/chatScrollView"
             android:background="@color/chat_background"
-            android:id="@+id/chatHistory"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/chatTextContainer"/>
+            android:fillViewport="true"
+            android:layout_above="@+id/chatTextContainer">
 
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical">
+
+                <us.iseek.android.view.FullListView
+                    android:id="@+id/chatHistoryList"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:dividerHeight="@dimen/item_list_padding"
+                    android:divider="#00000000"/>
+            </LinearLayout>
+        </ScrollView>
     </RelativeLayout>
 
 </LinearLayout>

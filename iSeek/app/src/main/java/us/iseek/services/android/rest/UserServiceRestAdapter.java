@@ -9,21 +9,12 @@
  */
 package us.iseek.services.android.rest;
 
-import java.io.IOException;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
 import android.util.Log;
 
-import us.iseek.model.android.HttpException;
+import us.iseek.model.android.exceptions.HttpException;
 import us.iseek.model.gps.Location;
 import us.iseek.model.request.user.CreateUserRequest;
 import us.iseek.model.request.user.UpdateUserLocationRequest;

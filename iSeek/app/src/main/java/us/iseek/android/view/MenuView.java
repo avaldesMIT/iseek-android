@@ -20,7 +20,7 @@ import android.widget.LinearLayout;
 
 import us.iseek.android.R;
 import us.iseek.android.activity.MenuDisplayingActivity;
-import us.iseek.model.android.MenuItem;
+import us.iseek.model.android.enums.MenuItem;
 
 /**
  * A custom menu to be used across all fragments.
@@ -56,7 +56,9 @@ public class MenuView extends LinearLayout {
         super(context, attrs);
 
         // Host activity is passed in context
-        this.activity = (MenuDisplayingActivity) context;
+        if (!this.isInEditMode()) {
+            this.activity = (MenuDisplayingActivity) context;
+        }
 
         // Get selected element from menu's style
         TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.MenuView, 0, 0);

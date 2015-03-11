@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  Copyright (C) 2015 iSeek, Inc.
+  All Rights Reserved.
+
+  This software is the confidential and proprietary information of iSeek, Inc.
+  You shall not disclose such confidential information and shall use it only
+  in accordance with the terms of the license agreement you entered into with
+  iSeek, Inc.
+-->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/chatElementUserName"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:textColor="@color/sub_title"
+        android:textSize="@dimen/chat_element_user_name_size"/>
+
+    <LinearLayout
+        android:id="@+id/chatElementMessageContainer"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/chatElementMessageText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textSize="@dimen/chat_element_message_text_size"/>
+    </LinearLayout>
+</LinearLayout>
