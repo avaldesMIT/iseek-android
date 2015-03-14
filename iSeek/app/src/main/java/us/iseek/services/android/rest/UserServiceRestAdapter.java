@@ -17,6 +17,7 @@ import android.util.Log;
 import us.iseek.model.android.exceptions.HttpException;
 import us.iseek.model.gps.Location;
 import us.iseek.model.request.user.CreateUserRequest;
+import us.iseek.model.request.user.UpdateUserGcmRegistrationIdRequest;
 import us.iseek.model.request.user.UpdateUserLocationRequest;
 import us.iseek.model.request.user.UpdateUserPreferencesRequest;
 import us.iseek.model.request.user.UpdateUserScreenNameRequest;
@@ -98,6 +99,33 @@ public class UserServiceRestAdapter implements IUserService {
         } catch (Exception e) {
             Log.e("HTTP_EXCEPTION", "Could not create user", e);
             throw new HttpException("Could not create user", e);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public User updateGcmRegistrationId(Long userId, String gcmRegistrationId) {
+        // Create request
+        UpdateUserGcmRegistrationIdRequest updateUserGcmRegistrationIdRequest
+                = new UpdateUserGcmRegistrationIdRequest(userId, gcmRegistrationId);
+
+        // Define connection parameters
+        Log.d("UPDATE_USER_GCM_REGISTRATION_ID",
+                "userId=" + userId + ",gcmRegistrationId=" + gcmRegistrationId);
+        String updateGcmRegistrationUrl = RestConstants.BASE_URL + USER_PATH + "/updateGcmRegistrationId";
+
+        try {
+            // Call web service
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+            User user = restTemplate.postForObject(
+                    updateGcmRegistrationUrl, updateUserGcmRegistrationIdRequest, User.class);
+            return user;
+        } catch (Exception e) {
+            Log.e("HTTP_EXCEPTION", "Could not update user's GCM registration ID", e);
+            throw new HttpException("Could not update user's GCM registration ID", e);
         }
     }
 

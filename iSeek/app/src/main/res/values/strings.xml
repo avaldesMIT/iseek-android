@@ -15,11 +15,10 @@
     limitations under the License.
 -->
 <resources>
-
+    <!-- Facebook application login -->
     <string name="app_name">iSeek</string>
     <string name="app_id">233936543368280</string>
     <string name="get_started">To get started, login using Facebook</string>
-    <string name="skip_login">continue as a guest</string>
 
     <!-- Menu Items -->
     <string name="topicsButton">topicsButton</string>

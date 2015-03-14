@@ -59,6 +59,14 @@ public class UserService implements IUserService {
      * {@inheritDoc}
      */
     @Override
+    public User updateGcmRegistrationId(Long userId, String gcmRegistrationId) {
+        return this.restAdapter.updateGcmRegistrationId(userId, gcmRegistrationId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public User updatePreferences(Long userId, Preferences preferences) {
         return this.restAdapter.updatePreferences(userId, preferences);
     }

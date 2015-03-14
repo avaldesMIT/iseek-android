@@ -9,6 +9,7 @@
  */
 package us.iseek.android.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -41,6 +42,7 @@ import us.iseek.android.R;
 import us.iseek.android.fragment.ChatFragment;
 import us.iseek.android.fragment.TopicSelectionFragment;
 import us.iseek.android.fragment.UserSettingsFragment;
+import us.iseek.managers.android.GcmRegistrationManager;
 import us.iseek.model.android.enums.MenuItem;
 import us.iseek.model.topics.HashTag;
 import us.iseek.model.user.User;
@@ -107,6 +109,9 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
             e.printStackTrace();
         }
 
+        // Check device for Play Services APK.
+        GcmRegistrationManager.getInstance().checkPlayServices(this);
+
         // Get location information
         this.googleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -119,6 +124,10 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         uiHelper = new UiLifecycleHelper(this, callback);
         uiHelper.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        // Register application to GCM
+        Context context = this.getApplicationContext();
+        GcmRegistrationManager.getInstance().registerInBackground(context);
 
         // Initialize fragments
         FragmentManager fm = getSupportFragmentManager();
@@ -145,6 +154,9 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         super.onResume();
         uiHelper.onResume();
         isResumed = true;
+
+        // Check device for Play Services APK.
+        GcmRegistrationManager.getInstance().checkPlayServices(this);
 
         // Log application activation for analytics/ads
         AppEventsLogger.activateApp(this);
@@ -368,6 +380,9 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
      */
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
+
+        // Add user to GCM registration manager
+        GcmRegistrationManager.getInstance().setUser(this.currentUser);
     }
 
     /**

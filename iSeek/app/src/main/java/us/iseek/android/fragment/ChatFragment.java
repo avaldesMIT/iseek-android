@@ -30,9 +30,11 @@ import java.util.List;
 
 import us.iseek.android.R;
 import us.iseek.android.activity.MainActivity;
+import us.iseek.android.messaging.TopicSubscriber;
 import us.iseek.android.view.element.ChatElement;
 import us.iseek.android.view.element.ChatElementArrayAdapter;
 import us.iseek.android.view.element.TopicListElementArrayAdapter;
+import us.iseek.model.communication.MessageAbstract;
 import us.iseek.model.communication.PublicMessage;
 import us.iseek.model.exception.UnsupportedMessageTypeException;
 import us.iseek.model.topics.HashTag;
@@ -47,8 +49,7 @@ import us.iseek.services.android.ServicesFactory;
  * @author Armando Valdes
  * @since 1.0
  */
-public class ChatFragment extends Fragment {
-
+public class ChatFragment extends Fragment implements TopicSubscriber {
 
     private MainActivity activity;
 
@@ -121,13 +122,6 @@ public class ChatFragment extends Fragment {
         this.chatText.clearFocus();
         this.hideKeyword();
 
-        this.chatScrollView.post(new Runnable() {
-            @Override
-            public void run() {
-                ChatFragment.this.chatScrollView.fullScroll(View.FOCUS_DOWN);
-            }
-        });
-
         // Get chat text
         String message = this.chatText.getText().toString();
 
@@ -139,7 +133,7 @@ public class ChatFragment extends Fragment {
         new SendMessageTask().execute(message);
 
         // Show message
-        this.displayMessage(message);
+        this.displayMessage(message, this.activity.getCurrentUser().getScreenName());
     }
 
     /**
@@ -147,21 +141,24 @@ public class ChatFragment extends Fragment {
      *
      * @param message
      *              - The message to display
+     * @param screenName
+     *              - The screen name of the person sending the message
      */
-    private void displayMessage(String message) {
+    private void displayMessage(String message, String screenName) {
         // Add message to list
-        this.chatMessages.add(new ChatElement(
-                this.activity.getCurrentUser().getScreenName(),
-                message, false));
-
-        // TODO: Remove code for testing
-        this.chatMessages.add(new ChatElement(
-                "Respondent",
-                "Really?", true));
+        this.chatMessages.add(new ChatElement(screenName, message, false));
 
         // Draw message to end
         this.chatHistoryList.setAdapter(new ChatElementArrayAdapter(
                 getActivity(), R.id.chatHistoryList, this.chatMessages));
+
+        // Scroll to end of view
+        this.chatScrollView.post(new Runnable() {
+            @Override
+            public void run() {
+                ChatFragment.this.chatScrollView.fullScroll(View.FOCUS_DOWN);
+            }
+        });
     }
 
     /**
@@ -182,6 +179,17 @@ public class ChatFragment extends Fragment {
                 (InputMethodManager) this.activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(
                 this.activity.getCurrentFocus().getWindowToken(), 0);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void receiveMessage(MessageAbstract message) {
+        // Do not display messages sent by the current user
+        if (!this.activity.getCurrentUser().getId().equals(message.getSenderUserId())) {
+            this.displayMessage(message.getMessage(), message.getSenderScreenName());
+        }
     }
 
     /**
